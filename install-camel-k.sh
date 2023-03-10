@@ -63,7 +63,7 @@ kubectl -n default create secret docker-registry external-registry-secret --dock
 echo "Creating and starting registry"
 if [ "$(docker inspect -f '{{.State.Running}}' "${DEFAULT_REGISTRY_NAME}" 2>/dev/null || true)" != 'true' ]; then
   docker run \
-    -d --restart=no -p "127.0.0.1:${DEFAULT_REGISTRY_PORT}:5000" --name "${DEFAULT_REGISTRY_NAME}" \
+    -d --restart=unless-stopped -p "127.0.0.1:${DEFAULT_REGISTRY_PORT}:5000" --name "${DEFAULT_REGISTRY_NAME}" \
     registry:2
 else
   docker stop "${DEFAULT_REGISTRY_NAME}"
@@ -97,7 +97,7 @@ fi
 echo "Make sure nexus is available"
 if [ "$(docker inspect -f '{{.State.Running}}' "${DEFAULT_NEXUS_NAME}" 2>/dev/null || true)" != 'true' ]; then
   docker run \
-    -d --restart=no -p "127.0.0.1:${DEFAULT_NEXUS_PORT}:8081" --name "${DEFAULT_NEXUS_NAME}" \
+    -d --restart=unless-stopped -p "127.0.0.1:${DEFAULT_NEXUS_PORT}:8081" --name "${DEFAULT_NEXUS_NAME}" \
     sonatype/nexus3
 else
   docker stop "${DEFAULT_NEXUS_NAME}"
